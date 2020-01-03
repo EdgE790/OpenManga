@@ -1,4 +1,4 @@
-package org.nv95.openmanga.providers;
+package org.nv95.openmanga.providers.online;
 
 import android.content.Context;
 import android.text.Html;
@@ -11,6 +11,7 @@ import org.nv95.openmanga.feature.manga.domain.MangaInfo;
 import org.nv95.openmanga.items.MangaPage;
 import org.nv95.openmanga.items.MangaSummary;
 import org.nv95.openmanga.lists.MangaList;
+import org.nv95.openmanga.providers.MangaProvider;
 import org.nv95.openmanga.utils.AppHelper;
 
 import java.net.URLEncoder;

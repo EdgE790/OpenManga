@@ -61,6 +61,9 @@
     <string name="sort_updated">Updated</string>
     <string name="sort_popular">Popular</string>
     <string name="sort_latest">Latest</string>
+    <string name="sort_trending">Trending</string>
+    <string name="sort_views">Views</string>
+    <string name="sort_new">New</string>
     <string name="action_sort">Sort order</string>
     <string name="sort_rating">By rating</string>
     <string name="genre_all">All</string>

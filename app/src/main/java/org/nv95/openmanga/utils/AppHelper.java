@@ -107,6 +107,12 @@ public class AppHelper {
         return null;
     }
 
+    /**
+     * Get Strings from context by an array of their id
+     * @param context context
+     * @param ids array of resource ids that will be used as indexes to retrieve strings
+     * @return array of strings
+     */
     public static String[] getStringArray(Context context, int[] ids) {
         String[] res = new String[ids.length];
         for (int i = 0; i < ids.length; i++) {

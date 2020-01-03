@@ -1,4 +1,4 @@
-package org.nv95.openmanga.providers;
+package org.nv95.openmanga.providers.online;
 
 import android.content.Context;
 import android.text.Html;
@@ -13,66 +13,76 @@ import org.nv95.openmanga.feature.manga.domain.MangaInfo;
 import org.nv95.openmanga.items.MangaPage;
 import org.nv95.openmanga.items.MangaSummary;
 import org.nv95.openmanga.lists.MangaList;
+import org.nv95.openmanga.providers.MangaProvider;
 import org.nv95.openmanga.utils.FileLogger;
 
 import java.util.ArrayList;
 
 /**
  * Created by nv95 on 30.09.15.
+ * provider for http://readmanga.me/
  */
-public class MintMangaProvider extends MangaProvider {
+public class ReadmangaRuProvider extends MangaProvider {
 
-    protected static final int genres[] = {R.string.genre_all, R.string.genre_art, R.string.genre_bara, R.string.genre_action, R.string.genre_martialarts, R.string.genre_vampires, R.string.genre_harem,
+    private static final String HOST = "http://readmanga.me/";
+
+    protected static final int sorts[] = {R.string.sort_popular, R.string.sort_latest, R.string.sort_updated, R.string.sort_rating};
+    protected static final String sortUrls[] = {"popular","created", "updated", "votes"};
+    protected static final int genres[] = {R.string.genre_all, R.string.genre_art, R.string.genre_action, R.string.genre_martialarts, R.string.genre_vampires, R.string.genre_harem,
             R.string.genre_genderbender, R.string.genre_hero_fantasy, R.string.genre_detective, R.string.genre_josei,
-            R.string.genre_doujinshi, R.string.genre_drama, R.string.genre_game, R.string.genre_historical, R.string.genre_cyberpunk,
-            R.string.genre_comedy, R.string.genre_mecha, R.string.genre_mystery,
+            R.string.genre_doujinshi, R.string.genre_drama, R.string.genre_game, R.string.genre_historical,
+            R.string.genre_codomo, R.string.genre_comedy, R.string.maho_shoujo, R.string.genre_mecha, R.string.genre_mystery,
             R.string.genre_sci_fi, R.string.genre_natural, R.string.genre_postapocalipse, R.string.genre_adventure,
             R.string.genre_psychological, R.string.genre_romance, R.string.genre_samurai, R.string.genre_supernatural,
             R.string.genre_shoujo, R.string.genre_shoujo_ai, R.string.genre_shounen, R.string.genre_shounen_ai,
             R.string.genre_sports, R.string.genre_seinen, R.string.genre_tragedy, R.string.genre_thriller,
             R.string.genre_horror, R.string.genre_fantastic, R.string.genre_fantasy,
-            R.string.genre_school, R.string.genre_erotica, R.string.genre_ecchi, R.string.genre_yuri, R.string.genre_yaoi
+            R.string.genre_school, R.string.genre_ecchi, R.string.genre_yuri
     };
-    protected static final String genreUrls[] = {"art", "bara", "action", "martial_arts", "vampires", "harem",
+    static final String genreUrls[] = {"art", "action", "martial_arts", "vampires", "harem",
             "gender_intriga", "heroic_fantasy", "detective", "josei", "doujinshi", "drama", "game",
-            "historical", "cyberpunk", "comedy", "mecha", "mystery",
+            "historical", "codomo", "comedy", "maho_shoujo", "mecha", "mystery",
             "sci_fi", "natural", "postapocalipse", "adventure", "psychological", "romance", "samurai",
             "supernatural", "shoujo", "shoujo_ai", "shounen", "shounen_ai", "sports", "seinen",
             "tragedy", "thriller", "horror", "fantastic", "fantasy",
-            "school", "erotica", "ecchi", "yuri", "yaoi"
+            "school", "ecchi", "yuri"
     };
 
-    public MintMangaProvider(Context context) {
+    @SuppressWarnings("WeakerAccess")
+    public ReadmangaRuProvider(Context context) {
         super(context);
     }
 
     @Override
     public MangaList getList(int page, int sort, int genre) throws Exception {
         MangaList list = new MangaList();
-        Document document = getPage("http://mintmanga.com/list" +
+        Document document = getPage(HOST + "list" +
                 (genre == 0 ? "" : "/genre/" + genreUrls[genre - 1])
-                + "?sortType=" + ReadmangaRuProvider.sortUrls[sort] + "&offset=" + page * 70 + "&max=70");
+                + "?sortType=" + sortUrls[sort] + "&offset=" + page * 70 + "&max=70");
         MangaInfo manga;
-        Element t;
-        Element h3, h4;
+        Element t, h3, h4;
         Elements elements = document.body().select("div.col-sm-6");
         final boolean lc = getBooleanPreference("localized_names", true);
         for (Element o : elements) {
             manga = new MangaInfo();
-            h4 = o.select("h4").first();
-            h3 = o.select("h3").first();
+            h4 = o.select("h4").first(); //Nullable
+            h3 = o.select("h3").first(); //NonNull
             manga.name = lc && h4 != null ? h4.text() : h3.text();
             manga.subtitle = lc ? h3.text() : (h4 == null ? "" : h4.text());
             manga.genres = o.select("a.element-link").text();
-            manga.path = "http://mintmanga.com" + o.select("a").first().attr("href");
-            manga.preview = o.select("img").first().attr("data-original");
-            manga.provider = MintMangaProvider.class;
+            manga.path = concatUrl(HOST, o.select("a").first().attr("href"));
+            try {
+                manga.preview = o.select("img").first().attr("data-original");
+            } catch (Exception e) {
+                manga.preview = "";
+            }
+            manga.provider = ReadmangaRuProvider.class;
             if (!o.select("span.mangaCompleted").isEmpty()) {
                 manga.status = MangaInfo.STATUS_COMPLETED;
             }
+            manga.id = manga.path.hashCode();
             t = o.select("div.rating").first();
             manga.rating = t == null ? 0 : Byte.parseByte(t.attr("title").substring(0, 3).replace(".",""));
-            manga.id = manga.path.hashCode();
             list.add(manga);
         }
         return list;
@@ -98,7 +108,7 @@ public class MintMangaProvider extends MangaProvider {
             for (Element o : e.select("a")) {
                 chapter = new MangaChapter();
                 chapter.name = o.text();
-                chapter.readLink = "http://mintmanga.com" + o.attr("href") + "?mature=1";
+                chapter.readLink = concatUrl(HOST, o.attr("href") + "?mature=1");
                 chapter.provider = summary.provider;
                 summary.chapters.add(0, chapter);
             }
@@ -130,10 +140,11 @@ public class MintMangaProvider extends MangaProvider {
                     for (int i = 0; i < array.length(); i++) {
                         o1 = array.getJSONArray(i);
                         page = new MangaPage(o1.getString(1) + o1.getString(0) + o1.getString(2));
-                        page.path = concatUrl("http://mintmanga.com/", page.path);
-                        page.provider = MintMangaProvider.class;
+                        if (page.path.startsWith("/")) {
+                            page.path = concatUrl(HOST, page.path);
+                        }
+                        page.provider = ReadmangaRuProvider.class;
                         pages.add(page);
-                        p++;
                     }
                     return pages;
                 }
@@ -151,7 +162,7 @@ public class MintMangaProvider extends MangaProvider {
 
     @Override
     public String getName() {
-        return "MintManga";
+        return "ReadManga";
     }
 
     @Override
@@ -160,7 +171,8 @@ public class MintMangaProvider extends MangaProvider {
     }
 
     @Override
-    public boolean hasSort() {return true;
+    public boolean hasSort() {
+        return true;
     }
 
     @Override
@@ -170,16 +182,13 @@ public class MintMangaProvider extends MangaProvider {
 
     @Override
     public String[] getSortTitles(Context context) {
-        return super.getTitles(context, ReadmangaRuProvider.sorts);
+        return super.getTitles(context, sorts);
     }
 
     @Override
     public String[] getGenresTitles(Context context) {
         return super.getTitles(context, genres);
     }
-
-    //advanced--------
-
 
     @Override
     public MangaList search(String query, int page) throws Exception {
@@ -190,12 +199,12 @@ public class MintMangaProvider extends MangaProvider {
         String data[] = new String[]{
                 "q", query.replace(' ','_')
         };
-        Document document = postPage("http://mintmanga.com/search/advanced", data);
+        Document document = postPage(HOST + "/search/advanced", data);
         MangaInfo manga;
         Element r;
-        Element h3, h4;
-        Elements elements = document.body().select("div.col-sm-6");
+        Element h4, h3;
         final boolean lc = getBooleanPreference("localized_names", true);
+        Elements elements = document.body().getElementById("mangaResults").select("div.col-sm-6");
         for (Element o : elements) {
             manga = new MangaInfo();
             h4 = o.select("h4").first();
@@ -203,11 +212,11 @@ public class MintMangaProvider extends MangaProvider {
             manga.name = lc && h4 != null ? h4.text() : h3.text();
             manga.subtitle = lc ? h3.text() : (h4 == null ? "" : h4.text());
             manga.genres = o.select("a.element-link").text();
-            manga.path = concatUrl("http://mintmanga.com/", o.select("a").first().attr("href"));
+            manga.path = concatUrl(HOST, o.select("a").first().attr("href"));
             manga.preview = o.select("img").first().attr("data-original");
             r = o.select("div.rating").first();
             manga.rating = r == null ? 0 : Byte.parseByte(r.attr("title").substring(0, 3).replace(".",""));
-            manga.provider = MintMangaProvider.class;
+            manga.provider = ReadmangaRuProvider.class;
             manga.id = manga.path.hashCode();
             list.add(manga);
         }

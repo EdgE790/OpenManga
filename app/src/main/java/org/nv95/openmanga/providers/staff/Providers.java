@@ -3,20 +3,21 @@ package org.nv95.openmanga.providers.staff;
 import androidx.annotation.Nullable;
 
 import org.nv95.openmanga.R;
-import org.nv95.openmanga.providers.DesuMeProvider;
-import org.nv95.openmanga.providers.EHentaiProvider;
-import org.nv95.openmanga.providers.HentaichanProvider;
-import org.nv95.openmanga.providers.MangaFoxProvider;
-import org.nv95.openmanga.providers.MangaReaderProvider;
-import org.nv95.openmanga.providers.MangaTownProvider;
-import org.nv95.openmanga.providers.MangachanProvider;
-import org.nv95.openmanga.providers.MintMangaProvider;
-import org.nv95.openmanga.providers.PuzzmosProvider;
-import org.nv95.openmanga.providers.ReadmangaRuProvider;
-import org.nv95.openmanga.providers.ScanFRProvider;
-import org.nv95.openmanga.providers.SelfmangaRuProvider;
-import org.nv95.openmanga.providers.TruyenTranhProvider;
-import org.nv95.openmanga.providers.YaoiChanProvider;
+import org.nv95.openmanga.providers.online.DesuMeProvider;
+import org.nv95.openmanga.providers.online.EHentaiProvider;
+import org.nv95.openmanga.providers.online.HentaichanProvider;
+import org.nv95.openmanga.providers.online.MangaFoxProvider;
+import org.nv95.openmanga.providers.online.MangaReadProvider;
+import org.nv95.openmanga.providers.online.MangaReaderProvider;
+import org.nv95.openmanga.providers.online.MangaTownProvider;
+import org.nv95.openmanga.providers.online.MangachanProvider;
+import org.nv95.openmanga.providers.online.MintMangaProvider;
+import org.nv95.openmanga.providers.online.PuzzmosProvider;
+import org.nv95.openmanga.providers.online.ReadmangaRuProvider;
+import org.nv95.openmanga.providers.online.ScanFRProvider;
+import org.nv95.openmanga.providers.online.SelfmangaRuProvider;
+import org.nv95.openmanga.providers.online.TruyenTranhProvider;
+import org.nv95.openmanga.providers.online.YaoiChanProvider;
 
 /**
  * Created by nv95 on 27.07.16.
@@ -38,7 +39,8 @@ public class Providers {
             new ProviderSummary(10, "Яой-тян", YaoiChanProvider.class, Languages.RU, R.xml.pref_anychan),
             new ProviderSummary(11, "TruyenTranh", TruyenTranhProvider.class, Languages.VIE, 0),
             new ProviderSummary(12, "Хентай-тян", HentaichanProvider.class, Languages.RU, R.xml.pref_henchan),
-            new ProviderSummary(13, "ScanFR", ScanFRProvider.class, Languages.FR, 0)
+            new ProviderSummary(13, "ScanFR", ScanFRProvider.class, Languages.FR, 0),
+            new ProviderSummary(14, "MangaRead", MangaReadProvider.class, Languages.EN, 0)
     };
 
     public static ProviderSummary[] getAll() {

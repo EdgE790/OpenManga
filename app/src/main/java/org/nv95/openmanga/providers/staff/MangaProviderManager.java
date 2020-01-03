@@ -3,17 +3,16 @@ package org.nv95.openmanga.providers.staff;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import org.nv95.openmanga.providers.EHentaiProvider;
+import org.nv95.openmanga.providers.online.EHentaiProvider;
 import org.nv95.openmanga.providers.FavouritesProvider;
 import org.nv95.openmanga.providers.HistoryProvider;
 import org.nv95.openmanga.providers.LocalMangaProvider;
 import org.nv95.openmanga.providers.MangaProvider;
-import org.nv95.openmanga.providers.MintMangaProvider;
-import org.nv95.openmanga.providers.ReadmangaRuProvider;
+import org.nv95.openmanga.providers.online.MintMangaProvider;
+import org.nv95.openmanga.providers.online.ReadmangaRuProvider;
 import org.nv95.openmanga.providers.RecommendationsProvider;
 import org.nv95.openmanga.utils.FileLogger;
 

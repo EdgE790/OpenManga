@@ -165,6 +165,7 @@ public class FavouritesProvider extends MangaProvider {
         cv.put("category", category);
         cv.put("rating", mangaInfo.rating);
         SQLiteDatabase database = mStorageHelper.getWritableDatabase();
+        remove(mangaInfo); // remove it from favorites if it's already here, so we can move entries to different lists
         boolean res = (database.insert(TABLE_NAME, null, cv) != -1);
         if (res) {
             SyncService.syncDelayed(mContext);

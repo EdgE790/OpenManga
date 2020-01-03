@@ -172,8 +172,11 @@ public class MainActivity extends BaseAppActivity implements
         mTextViewHolder.setMovementMethod(new InternalLinkMovement(this));
         mFab.setOnClickListener(this);
         mFab.setOnLongClickListener(this);
-        mFab.setVisibility(PreferenceManager.getDefaultSharedPreferences(getApplicationContext())
-                .getBoolean("fab", true) ? View.VISIBLE : View.GONE);
+        if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("fab", true)) {
+            mFab.show();
+        } else {
+            mFab.hide();
+        }
         mNavigationView = (NavigationView) findViewById(R.id.navigation_drawer);
         mNavigationView.setNavigationItemSelectedListener(this);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 1));
@@ -745,7 +748,6 @@ public class MainActivity extends BaseAppActivity implements
             setCancelable(true);
         }
 
-        @SuppressWarnings("ConstantConditions")
         @Override
         protected Pair<Integer, Intent> doInBackground(Boolean... params) {
             try {

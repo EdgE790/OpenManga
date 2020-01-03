@@ -2,7 +2,7 @@ package org.nv95.openmanga.utils
 
 import android.content.Context
 import okhttp3.Request
-import org.nv95.openmanga.providers.EHentaiProvider
+import org.nv95.openmanga.providers.online.EHentaiProvider
 
 /**
  * Created by nv95 on 21.11.16.

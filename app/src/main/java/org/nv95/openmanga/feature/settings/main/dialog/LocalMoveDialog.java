@@ -98,14 +98,14 @@ public class LocalMoveDialog {
             MangaStore store = new MangaStore(mContext);
             long totalSize = 0;
             for (int i = 0; i < params.length; i++) {
-                publishProgress(i, params.length, params[i].name);
-                if (params[i].path.equals(mDest)) {
+                publishProgress(i, params.length, params[i].getName());
+                if (params[i].getPath().equals(mDest)) {
                     continue;
                 }
-                if (!store.moveManga(params[i].id, mDest)) {
+                if (!store.moveManga(params[i].getId(), mDest)) {
                     return null;
                 }
-                totalSize += params[i].size;
+                totalSize += params[i].getSize();
             }
             return totalSize;
         }
@@ -161,7 +161,7 @@ public class LocalMoveDialog {
                     .getLocalInfo(mIds);
             ArrayList<LocalMangaInfo> res = new ArrayList<>();
             for (LocalMangaInfo o : infos) {
-                if (o != null && !o.path.equals(mExclude)) {
+                if (o != null && !o.getPath().equals(mExclude)) {
                     res.add(o);
                 }
             }
@@ -226,11 +226,11 @@ public class LocalMoveDialog {
             View v = convertView != null ? convertView : LayoutInflater.from(getContext())
                     .inflate(R.layout.item_adapter_checkable, parent, false);
             LocalMangaInfo item = getItem(position);
-            ((TextView) v.findViewById(android.R.id.text1)).setText(item.name);
+            ((TextView) v.findViewById(android.R.id.text1)).setText(item.getName());
             ((TextView) v.findViewById(android.R.id.text2)).setText(
-                    new File(item.path).getParent()
+                    new File(item.getPath()).getParent()
                             + "\n"
-                            + Formatter.formatFileSize(getContext(), item.size)
+                            + Formatter.formatFileSize(getContext(), item.getSize())
             );
             ((CheckBox) v.findViewById(android.R.id.checkbox)).setChecked(mChecked[position]);
             return v;

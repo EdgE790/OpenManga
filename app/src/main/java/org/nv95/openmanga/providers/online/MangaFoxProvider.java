@@ -1,4 +1,4 @@
-package org.nv95.openmanga.providers;
+package org.nv95.openmanga.providers.online;
 
 import android.content.Context;
 import androidx.annotation.Nullable;
@@ -13,6 +13,7 @@ import org.nv95.openmanga.feature.manga.domain.MangaInfo;
 import org.nv95.openmanga.items.MangaPage;
 import org.nv95.openmanga.items.MangaSummary;
 import org.nv95.openmanga.lists.MangaList;
+import org.nv95.openmanga.providers.MangaProvider;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class MangaFoxProvider extends MangaProvider {
         MangaList list = new MangaList();
         Document document = getPage("http://fanfox.net/directory/"
                 + (genre == 0 ? "" : genreUrls[genre - 1] + "/")
-                + (page + 1) + ".htm" + sortUrls[sort]);
+                + (page + 1) + ".html" + sortUrls[sort]);
         MangaInfo manga;
         Element root = document.body().selectFirst("ul.manga-list-1-list");
         for (Element o : root.children()) {

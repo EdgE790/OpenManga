@@ -1,6 +1,7 @@
 package org.nv95.openmanga.feature.manga.domain;
 
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 
 import org.nv95.openmanga.providers.LocalMangaProvider;
@@ -16,17 +17,31 @@ public class MangaInfo {
     public static final int STATUS_ONGOING = 2;
 
     public int id;
+    /** Name of the manga */
     public String name;
+    /** Another [localized] name of the manga */
     public String subtitle;
+    /** String that containes genres*/
     public String genres;
+    /** URL to the manga page*/
     public String path;
+    /** Url to preview image */
     public String preview;
+    /** Provider which was used or/and will be used for this manga */
     public Class<? extends MangaProvider> provider;
+    /** Status. Look can be one of these values: STATUS_UNKNOWN, STATUS_COMPLETED, STATUS_ONGOING */
     public int status;
     @Nullable
     public String extra;
-    public byte rating; //0..100
+    /** Rating that should be in range of 0 and 100 */
+    public byte rating;
 
+    /**
+     * @param name name of manga
+     * @param genres genres of manga
+     * @param path path that will be used to get additional info about the manga
+     * @param preview url to image
+     */
     public MangaInfo(String name, String genres, String path, String preview) {
         this.name = name;
         this.genres = genres;

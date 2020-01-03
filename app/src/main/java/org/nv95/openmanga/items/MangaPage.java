@@ -17,4 +17,9 @@ public class MangaPage {
     public MangaPage(String path) {
         this.path = path;
     }
+
+    public MangaPage(String path, Class<? extends MangaProvider> provider) {
+        this.path = path;
+        this.provider = provider;
+    }
 }

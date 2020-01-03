@@ -283,11 +283,12 @@ public class LocalMangaProvider extends MangaProvider {
                 cursor = mStore.getDatabase(false)
                         .query(MangaStore.TABLE_MANGAS, new String[]{"name", "dir"}, "id=?", new String[]{String.valueOf(ids[i])}, null, null, null);
                 if (cursor.moveToFirst()) {
-                    infos[i] = new LocalMangaInfo();
-                    infos[i].id = ids[i];
-                    infos[i].name = cursor.getString(0);
-                    infos[i].path = cursor.getString(1);
-                    infos[i].size = StorageUtils.dirSize(new File(infos[i].path));
+                    infos[i] = new LocalMangaInfo(
+                            ids[i],
+                            cursor.getString(0),
+                            cursor.getString(1),
+                            StorageUtils.dirSize(new File(cursor.getString(1)))
+                    );
                 }
             }
         } catch (Exception e) {

@@ -1,6 +1,8 @@
 package org.nv95.openmanga.feature.main.adapter;
 
 import android.content.Context;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,7 +30,8 @@ public class GenresSortAdapter extends RecyclerView.Adapter<GenresSortAdapter.Te
 
     private final ArrayList<TypedString> mDataset;
     private final Callback mCallback;
-    private int mSelGenre, mSelSort;
+    private int mSelGenre;
+    private int mSelSort;
 
     public GenresSortAdapter(Callback callback) {
         mDataset = new ArrayList<>();
@@ -37,11 +40,25 @@ public class GenresSortAdapter extends RecyclerView.Adapter<GenresSortAdapter.Te
         mSelSort = 0;
     }
 
+    /**
+     * Loads settings from MangaProvider
+     * @param context context
+     * @param provider provider that will be used to load sorts
+     */
     public void fromProvider(Context context, MangaProvider provider) {
-        String[] data;
         mDataset.clear();
+        processSortFromProvider(context, provider);
+        processGenreFromProvider(context, provider);
+        mSelGenre = 0;
+        if (mDataset.isEmpty()) {
+            mDataset.add(new TypedString(context.getString(R.string.no_options_available), TYPE_HEADER));
+        }
+        notifyDataSetChanged();
+    }
+
+    private void processSortFromProvider(Context context, MangaProvider provider) {
         if (provider.hasSort()) {
-            data = provider.getSortTitles(context);
+            String[] data = provider.getSortTitles(context);
             if (data != null) {
                 mDataset.add(new TypedString(context.getString(R.string.action_sort), TYPE_HEADER));
                 for (int i = 0; i < data.length; i++) {
@@ -52,8 +69,11 @@ public class GenresSortAdapter extends RecyclerView.Adapter<GenresSortAdapter.Te
         } else {
             mSelSort = 0;
         }
+    }
+
+    private void processGenreFromProvider(Context context, MangaProvider provider) {
         if (provider.hasGenres()) {
-            data = provider.getGenresTitles(context);
+            String[] data = provider.getGenresTitles(context);
             if (data != null) {
                 mDataset.add(new TypedString(context.getString(
                         provider instanceof FavouritesProvider
@@ -64,11 +84,6 @@ public class GenresSortAdapter extends RecyclerView.Adapter<GenresSortAdapter.Te
                 }
             }
         }
-        mSelGenre = 0;
-        if (mDataset.size() == 0) {
-            mDataset.add(new TypedString(context.getString(R.string.no_options_available), TYPE_HEADER));
-        }
-        notifyDataSetChanged();
     }
 
     public int getSelectedGenre() {
@@ -79,8 +94,9 @@ public class GenresSortAdapter extends RecyclerView.Adapter<GenresSortAdapter.Te
         return mSelSort;
     }
 
+    @NonNull
     @Override
-    public TextViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TextViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         switch (viewType) {
             case TYPE_SORT:
@@ -127,13 +143,13 @@ public class GenresSortAdapter extends RecyclerView.Adapter<GenresSortAdapter.Te
     }
 
     @Nullable
-    public String getSelectedGenreName() {
+    private String getSelectedGenreName() {
         int pos = getAbsolutePosition(TYPE_GENRE, mSelGenre);
         return pos == -1 ? null : mDataset.get(pos).data;
     }
 
     @Nullable
-    public String getSelectedSortName() {
+    private String getSelectedSortName() {
         int pos = getAbsolutePosition(TYPE_SORT, mSelSort);
         return pos == -1 ? null : mDataset.get(pos).data;
     }
@@ -141,7 +157,7 @@ public class GenresSortAdapter extends RecyclerView.Adapter<GenresSortAdapter.Te
     @Override
     public void onClick(View view) {
         Object tag = view.getTag();
-        if (tag != null && tag instanceof RadioCheckHolder) {
+        if (tag instanceof RadioCheckHolder) {
             int pos = ((RadioCheckHolder) tag).getAdapterPosition();
             TypedString item = mDataset.get(pos);
             if (item.type == TYPE_SORT) {
@@ -174,6 +190,7 @@ public class GenresSortAdapter extends RecyclerView.Adapter<GenresSortAdapter.Te
             this.subPosition = subpos;
         }
 
+        @NonNull
         @Override
         public String toString() {
             return data;
