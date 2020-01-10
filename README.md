@@ -1,7 +1,13 @@
 # OpenManga
 
 OpenManga - Powerful manga reader for Android with online catalogues.
-[![Build Status](https://travis-ci.org/nv95/OpenManga.svg?branch=master)](https://travis-ci.org/nv95/OpenManga)
+[![Build Status](https://travis-ci.com/EdgE790/OpenManga.svg?branch=in_progress)](https://travis-ci.com/EdgE790/OpenManga)
+
+## Changes to parent repo https://github.com/nv95/OpenManga
+- Added MangaRead provider
+- When something added to favorites it tries to remove it from favorites before adding, so it's possible now to move manga between different lists
+- [meta] providers that require internet access were moved to the "online" package. Because of this, this version is incompatible with the database of the previous version
+- [meta] some additional strange refactoring without any purpose
 
 ## Help
 If you can add:
