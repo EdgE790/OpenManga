@@ -1,6 +1,6 @@
 # OpenManga
 
-OpenManga - Powerful manga reader for Android with online catalogues.
+OpenManga - Powerful manga reader for Android with online catalogs.
 [![Build Status](https://travis-ci.com/EdgE790/OpenManga.svg?branch=in_progress)](https://travis-ci.com/EdgE790/OpenManga)
 
 ## Changes to parent repo https://github.com/nv95/OpenManga
@@ -14,7 +14,7 @@ If you can add:
 - translation
 - source with manga
 
-please add and create pull request
+please add and create a pull request
 
 It will be MUCH faster
 
@@ -33,7 +33,7 @@ It will be MUCH faster
  - Importing/exporting to CBZ files
  - Data synchronization (source code available [here](https://github.com/nv95/OpenManga-sync) )
  
-You can help translate this app and add online catalogues.
+You can help translate this app and add online catalogs.
 
 ## Screenshots
 
