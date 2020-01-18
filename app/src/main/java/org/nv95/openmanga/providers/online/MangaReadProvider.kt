@@ -129,8 +129,8 @@ class MangaReadProvider(ctx: Context) : MangaProvider(ctx) {
 
 		val chapters = root.select(".wp-manga-chapter")
 
-		chapters.forEachIndexed { index, chapter ->
-			mangaSummary.chapters.add(extractChapterFromElement(chapter, chapters.size - index))
+		chapters.reversed().forEachIndexed { index, chapter ->
+			mangaSummary.chapters.add(extractChapterFromElement(chapter, index))
 		}
 
 		return mangaSummary
