@@ -48,7 +48,7 @@ public class MangaTownProvider extends MangaProvider {
             } catch (Exception e) {
                 manga.genres = "";
             }
-            manga.path = appendProtocol("http:", o.select("a").first().attr("href"));
+            manga.path = appendSite(o.select("a").first().attr("href"));
             try {
                 manga.preview = o.select("img").first().attr("src");
             } catch (Exception e) {
@@ -75,7 +75,7 @@ public class MangaTownProvider extends MangaProvider {
             for (Element o : e.select("li")) {
                 chapter = new MangaChapter();
                 chapter.name = o.select("a").first().text() + " " + o.select("span").get(0).text();
-                chapter.readLink = appendProtocol("http:", o.select("a").first().attr("href"));
+                chapter.readLink = appendSite(o.select("a").first().attr("href"));
                 chapter.provider = summary.provider;
                 summary.chapters.add(0, chapter);
             }
@@ -95,7 +95,7 @@ public class MangaTownProvider extends MangaProvider {
             MangaPage page;
             Element e = document.body().select("select").get(1);
             for (Element o : e.select("option")) {
-                page = new MangaPage(appendProtocol("http:", o.attr("value")));
+                page = new MangaPage(appendSite(o.attr("value")));
                 page.provider = MangaTownProvider.class;
                 pages.add(page);
             }
@@ -114,7 +114,8 @@ public class MangaTownProvider extends MangaProvider {
     public String getPageImage(MangaPage mangaPage) {
         try {
             Document document = getPage(mangaPage.path);
-            return document.body().getElementById("image").attr("src");
+            String noProtocolUrl = document.body().getElementById("image").attr("src");
+            return appendProtocol("http:", noProtocolUrl);
         } catch (Exception e) {
             return null;
         }
@@ -133,7 +134,7 @@ public class MangaTownProvider extends MangaProvider {
             Element el = o.select("a").first();
             if (null != el) {
                 manga.name = el.attr("title");
-                manga.path = appendProtocol("http:", el.attr("href"));
+                manga.path = appendSite(el.attr("href"));
             }
             manga.subtitle = "";
             try {
@@ -149,11 +150,15 @@ public class MangaTownProvider extends MangaProvider {
                 manga.preview = "";
             }
 
-            manga.path.hashCode();
+            manga.id = manga.path.hashCode();
 
             list.add(manga);
         }
         return list;
+    }
+
+    private static String appendSite(String url){
+        return url != null ? "http://www.mangatown.com" + url : null;
     }
 
     @Override
