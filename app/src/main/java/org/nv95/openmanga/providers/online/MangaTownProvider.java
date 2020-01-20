@@ -95,7 +95,12 @@ public class MangaTownProvider extends MangaProvider {
             MangaPage page;
             Element e = document.body().select("select").get(1);
             for (Element o : e.select("option")) {
-                page = new MangaPage(appendSite(o.attr("value")));
+				String url = o.attr("value");
+				if (url.endsWith("featured.html")){
+					//skip ads, because they will create error when we will try to load image
+					continue;
+				}
+				page = new MangaPage(appendSite(url));
                 page.provider = MangaTownProvider.class;
                 pages.add(page);
             }
